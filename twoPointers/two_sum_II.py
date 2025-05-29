@@ -1,6 +1,27 @@
+# this is two-pointer method
+def two_sum(numbers, target):
+    left, right = 0, len(numbers) - 1
+    while left < right:
+        current_sum = numbers[left] + numbers[right]
+        if current_sum == target:
+            return [left + 1, right + 1]  # 1-based indices
+        elif current_sum < target:
+            left += 1
+        else:
+            right -= 1
+    return []
+numbers = [2, 7, 11, 15]
+target = 9
+print(two_sum(numbers, target))  
+# Output: [1, 2]
+
+------------------------------------------------------------------------------------------------------
+
+# this is arrays&hashing method
 def two_sum_with_values_and_indices(nums, target):
     seen = {}
-    for i, num in enumerate(nums):
+    # start is 1, bcoz 1-indexed
+    for i, num in enumerate(nums, start = 1):
         complement = target - num
         if complement in seen:
             return {
