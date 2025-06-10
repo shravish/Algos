@@ -1,0 +1,123 @@
+def length_of_longest_substring(s: str) -> int:
+    char_set = set()
+    left = 0
+    max_length = 0
+
+    for right in range(len(s)):
+        while s[right] in char_set:
+            char_set.remove(s[left])
+            left += 1
+        char_set.add(s[right])
+        max_length = max(max_length, right - left + 1)
+
+    return max_length
+
+# Example usage:
+print(length_of_longest_substring("abcabcbb"))  # Output: 3
+
+Explanation:
+Use a sliding window with two pointers (left and right).
+Use a set to track characters in the current window.
+Move the right pointer forward and add characters to the set.
+If a duplicate is found, move the left pointer to shrink the window until duplicates are removed.
+Track the max length found.
+Let’s use this input string as an example:
+s = "abcabcbb"
+Step 1: Initialization
+char_set = set() — to keep track of characters in the current window (no duplicates allowed).
+left = 0 — left pointer of the window.
+max_length = 0 — the length of the longest valid substring found.
+Step 2: Loop through the string with a right pointer
+We loop through each character using a right pointer (index of the character).
+right = 0 → s[0] = 'a'
+'a' not in char_set. Add 'a' to the set: {'a'}.
+Window: "a" (from index 0 to 0)
+Update max_length = max(0, 0 - 0 + 1) = 1
+right = 1 → s[1] = 'b'
+'b' not in char_set. Add 'b': {'a', 'b'}
+Window: "ab" (from 0 to 1)
+max_length = max(1, 1 - 0 + 1) = 2
+right = 2 → s[2] = 'c'
+'c' not in char_set. Add 'c': {'a', 'b', 'c'}
+Window: "abc" (from 0 to 2)
+max_length = max(2, 2 - 0 + 1) = 3
+right = 3 → s[3] = 'a'
+'a' is already in char_set → we have a duplicate.
+We shrink the window from the left:
+Remove s[0] = 'a' → char_set = {'b', 'c'}
+Increment left to 1
+Now 'a' is not in the set → add 'a': {'a', 'b', 'c'}
+Window: "bca" (from 1 to 3)
+max_length = max(3, 3 - 1 + 1) = 3
+right = 4 → s[4] = 'b'
+'b' is in char_set → remove 'b' (s[1]), move left to 2.
+Add 'b' again → window: "cab" (from 2 to 4)
+max_length = 3
+right = 5 → s[5] = 'c'
+'c' is in char_set → remove 'c' (s[2]), move left to 3.
+Add 'c' → window: "abc" (from 3 to 5)
+max_length = 3
+right = 6 → s[6] = 'b'
+'b' is in char_set → remove 'a' (s[3]), then 'b' (s[4]), move left to 5.
+Add 'b' → window: "cb" (from 5 to 6)
+max_length = 3
+right = 7 → s[7] = 'b'
+'b' is in char_set → remove 'c' (s[5]), then 'b' (s[6]), move left to 7.
+Add 'b' → window: "b" (from 7 to 7)
+max_length = 3
+Final Result:
+After finishing the loop, the maximum length of a substring without repeating characters is:
+3 (substring "abc")
+
+Step-by-Step Explanation
+def length_of_longest_substring(s: str) -> int:
+This defines a function that takes a string s and returns an integer (length of the longest substring without repeating characters).
+
+char_set = set()
+We use a set to keep track of characters in the current substring window.
+
+Sets are fast for checking duplicates (O(1) lookup time).
+
+left = 0
+This is the start pointer (left boundary) of the sliding window.
+
+Initially, it points to the first character.
+
+max_length = 0
+To store the length of the longest valid substring we find.
+
+Starts at 0.
+
+for right in range(len(s)):
+We loop over the string with the right pointer (end boundary of the sliding window).
+
+This pointer expands the window by moving rightward through the string.
+
+while s[right] in char_set:
+If the character at position right is already in the set, it means a duplicate exists in the current window.
+
+So, we need to shrink the window from the left until the duplicate is removed.
+
+char_set.remove(s[left])
+Remove the character at the left pointer from the set.
+
+left += 1
+Move the left pointer forward by one to reduce the window size.
+
+This continues until the duplicate is gone.
+
+char_set.add(s[right])
+Once we’ve removed duplicates, we add the current s[right] to the set.
+
+Now the window [left, right] has all unique characters.
+
+max_length = max(max_length, right - left + 1)
+Calculate the current window size and update max_length if this window is larger.
+
+right - left + 1 gives the length of the current valid substring.
+
+return max_length
+Finally, return the length of the longest substring without repeating characters found.
+
+Example
+For s = "abcabcbb", the function would return 3 (substring "abc").
