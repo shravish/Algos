@@ -1,0 +1,60 @@
+def characterReplacement(s: str, k: int) -> int:
+    max_len = 0
+    max_count = 0
+    count = [0] * 26
+    left = 0
+
+    for right in range(len(s)):
+        count[ord(s[right]) - ord('A')] += 1
+        max_count = max(max_count, count[ord(s[right]) - ord('A')])
+
+        # If more than k characters need to be replaced, shrink window
+        while (right - left + 1) - max_count > k:
+            count[ord(s[left]) - ord('A')] -= 1
+            left += 1
+
+        max_len = max(max_len, right - left + 1)
+
+    return max_len
+print(characterReplacement("AABABBA", 1))  # Output: 4
+
+You're given a string s and an integer k.
+Your task is to find the length of the longest substring where you can replace at most k characters to make all characters in that substring the same.
+
+def characterReplacement(s: str, k: int) -> int:
+This defines a function that takes a string s and an integer k.
+
+    max_len = 0
+    max_count = 0
+    count = [0] * 26
+    left = 0
+max_len: Stores the maximum length of a valid window (substring).
+max_count: Keeps track of the count of the most frequent character in the current window.
+count: An array of size 26 to track the frequency of each uppercase character (A–Z).
+left: The left index of the sliding window.
+
+Sliding Window Begins:
+for right in range(len(s)):
+This loop expands the window by moving the right pointer through the string.
+
+        count[ord(s[right]) - ord('A')] += 1
+        max_count = max(max_count, count[ord(s[right]) - ord('A')])
+We update the frequency count of the character at s[right].
+max_count is updated to be the frequency of the most common character in the current window.
+
+      while (right - left + 1) - max_count > k:
+            count[ord(s[left]) - ord('A')] -= 1
+            left += 1
+(right - left + 1) is the length of the current window.
+If the number of characters we’d need to replace (total length - max frequency character) is more than k, we shrink the window from the left.
+
+max_len = max(max_len, right - left + 1)
+After adjustments, we check if this new window is the largest valid one we've seen.
+
+Finally:
+    return max_len
+This returns the length of the longest valid substring.
+
+Example:
+For s = "AABABBA" and k = 1:
+The longest valid substring is "ABBB" or "AABA", both length 4.
